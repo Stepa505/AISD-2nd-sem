@@ -18,14 +18,17 @@ void arrToFile(std::vector<int>& arr, std::fstream& filename) {
 	}
 } 
 
-void merge(std::fstream fileA, std::fstream fileB, std::fstream mergeFile) {
+void merge(std::string nameA, std::string nameB, std::string nameOfMergeFile) {
 	int a;
 	int b;
+	std::fstream fileA(nameA);
+	std::fstream fileB(nameB);
+	std::fstream mergeFile(nameOfMergeFile);
 	fileA >> a;
 	fileB >> b;
 	while (!fileA.eof() || !fileB.eof()) {
 		while (a != -1 && b != -1) {
-			if (a < b) {
+			if (a < b && a != -1) {
 				mergeFile << a << " ";
 				fileA >> a;
 			}
@@ -43,19 +46,24 @@ void merge(std::fstream fileA, std::fstream fileB, std::fstream mergeFile) {
 			fileB >> b;
 			mergeFile << b << " ";
 		}
+		mergeFile << -1 << " ";
 	}
 	else {
 		while (!fileA.eof()) {
 			fileA >> a;
 			mergeFile << a << " ";
 		}
+		mergeFile << -1 << " ";
 	}
 }
 
-void split(std::fstream mergeFile, std::fstream fileA, std::fstream fileB) {
+void split(std::string nameOfMergingFile, std::string nameA, std::string nameB) {
 	int a, b;
-	mergeFile >> a >> b;
-	while (!mergeFile.eof()) {
+	std::fstream writingFileA(nameA);
+	std::fstream mergingFile(nameOfMergingFile);
+	std::fstream writingFileB(nameB);
+	mergingFile >> a >> b;
+	while (!mergingFile.eof()) {
 
 	}
 }
@@ -83,4 +91,18 @@ int main() {
 	int gap = 1000;
 	randArr(array, gap, size);
 	arrToFile(array, f);
+	for (int i = 0; i < size; ++i) {
+		int a, b;
+		f >> a >> b;
+		if (a > b) {
+			fa << a << " ";
+			a = b;
+			f >> b;
+		}
+		else {
+			fa << a << " " << -1 << " ";
+			a = b;
+			f >> b;
+		}
+	}
 }
